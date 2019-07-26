@@ -4,8 +4,6 @@ import java.sql.Date;
 import java.sql.Timestamp;
 
 public class Ticket {
-	java.sql.Date sd1=new java.sql.Date(System.currentTimeMillis());
-	java.util.Date ud1=new java.util.Date(sd1.getTime());
 	
 	private int bookingId;
 	private Date journeyDate;

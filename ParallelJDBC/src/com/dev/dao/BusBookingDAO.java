@@ -1,10 +1,8 @@
 package com.dev.dao;
 
-import java.sql.Date;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
+import com.dev.beans.Available;
 import com.dev.beans.Bus;
 import com.dev.beans.Suggestion;
 import com.dev.beans.Ticket;
@@ -35,7 +33,7 @@ public interface BusBookingDAO {
 		public Ticket getTicket(int booking_id);
 		public List <Bus>checkAvailability(String source,String destination,java.sql.Date date);
 		public Integer checkAvailability( int bus_id, java.sql.Date date);
-		
+		public Boolean setAvailability(Available available);
 		
 		public Boolean giveFeedback(int userId, String feedback);
 		public List<Suggestion> getAllSuggestions(Suggestion sugg); 

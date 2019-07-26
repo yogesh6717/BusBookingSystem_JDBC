@@ -19,7 +19,6 @@ import com.dev.service.ServiceImpl;
 
 public class UserApp {
     static int userid=0;
-	static String password;
 	static Service service = new ServiceImpl();
 	static Scanner sc = new Scanner(System.in);
 
@@ -115,13 +114,34 @@ public class UserApp {
 	private static void updateUser() throws UpdateException {
 		User user = new User();
 		user.setUserId(userid);
-		user.setUserPassword(password);
+		System.out.println("Enter Password");
+
+		user.setUserPassword(sc.next());
 		System.out.println("Enter New Username");
 		user.setUserName(sc.next());
-		System.out.println("Enter New Email");
-		user.setEmail(sc.next());
-		System.out.println("Enter New Contact");
-		user.setContact(sc.nextLong());
+		boolean checkEmail = true;
+		while(checkEmail) {
+		System.out.println("Enter Email:");
+		String temp=service.regexemail(sc.next());
+		if(temp !=null) {
+			user.setEmail(temp);
+			checkEmail = false;
+		}else {
+			System.out.println("Wrong Email Format!! e.g(example@email.com)");
+		}
+	}
+
+		boolean checkContact = true;
+		while(checkContact) {
+		System.out.println("Enter Contact No.:");
+		Long temp=service.regexcontact(sc.next());
+		if(temp !=null) {
+			user.setContact(temp);
+			checkContact = false;
+		}else {
+			System.out.println("Contact should be of 10 digits!!");
+		}
+	}
 
 		boolean b = service.updateUser(user);
 		if(b) {
@@ -151,7 +171,7 @@ public class UserApp {
 			}
 		}
 		System.out.println("Enter password:");
-		password=sc.next();	
+		String password=sc.next();	
 		if(service.loginUser(userid,password ) != null) {
 			return true;
 		}else {
@@ -161,7 +181,8 @@ public class UserApp {
 	}
 
 	private static void deleteUser() throws DeleteException {
-
+		System.out.println("Enter Password");
+		String password=sc.next();	
 		if(service.deleteUser(userid, password)){
 			System.out.println("Profile sucessfully Deleted");
 		}else{

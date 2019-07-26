@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.dev.beans.Available;
 import com.dev.beans.Bus;
 import com.dev.beans.Suggestion;
 import com.dev.beans.Ticket;
@@ -78,7 +79,11 @@ public class ServiceImpl implements Service {
 	public Boolean cancelTicket(int booking_id) {
 		return db.cancelTicket(booking_id);
 	}
-
+	
+	@Override
+	public Boolean setAvailability(Available available) {
+		return db.setAvailability(available);
+	}
 	@Override
 	public Ticket getTicket(int booking_id) {
 		return db.getTicket(booking_id);
@@ -139,6 +144,8 @@ public class ServiceImpl implements Service {
 		}
 
 	}
+
+	
 
 }
 

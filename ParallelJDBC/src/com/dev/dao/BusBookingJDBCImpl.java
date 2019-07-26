@@ -3,7 +3,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.dev.beans.Admin;
+import com.dev.beans.Available;
 import com.dev.beans.Bus;
 import com.dev.beans.Suggestion;
 import com.dev.beans.Ticket;
@@ -450,8 +450,6 @@ public class BusBookingJDBCImpl implements BusBookingDAO{
 	@Override
 	public Integer checkAvailability(int bus_id, java.sql.Date date) {
 		String query ="SELECT avail_seats  FROM availability where bus_id="+bus_id+" AND avail_date='"+date+"'";
-		String creAvail ="Insert into availability (avail_seats,avail_date,bus_id)"
-				+ "values(?,?,?)";
 		int seats=0;
 		Bus bus=searchBus(bus_id);
 		if(bus!=null){
@@ -460,18 +458,12 @@ public class BusBookingJDBCImpl implements BusBookingDAO{
 		}
 		try(Connection conn = DriverManager.getConnection(url);
 				Statement stmt = conn.createStatement();
-				PreparedStatement pstmt = conn.prepareStatement(creAvail);
 				ResultSet rs = stmt.executeQuery(query)){
 
 			if(rs.next()){
 				seats = rs.getInt("avail_seats");
 				return seats;
 			}	else {
-
-				pstmt.setInt(1,bus.getTotalSeats());
-				pstmt.setDate(2, date);
-				pstmt.setInt(3, bus_id);
-				pstmt.executeUpdate();
 				return seats;
 			}
 		
@@ -525,5 +517,25 @@ public class BusBookingJDBCImpl implements BusBookingDAO{
 	}
 	return list;
 	}
+
+
+	@Override
+	public Boolean setAvailability(Available available) {
+		String query = "INSERT INTO availability (avail_date,avail_seats,bus_id) VALUES (?,?,?)";
+		try (Connection conn = DriverManager.getConnection(url);
+			PreparedStatement pstmt = conn.prepareStatement(query)) {
+			pstmt.setDate(1, available.getAvailableDate());
+			pstmt.setInt(2, available.getAvailableSeats());
+			pstmt.setInt(3, available.getBusId());
+			int res = pstmt.executeUpdate();
+			if (res > -1)
+				return true;
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+
 
 }

@@ -2,6 +2,7 @@ package com.dev.service;
 
 import java.util.List;
 
+import com.dev.beans.Available;
 import com.dev.beans.Bus;
 import com.dev.beans.Suggestion;
 import com.dev.beans.Ticket;
@@ -35,7 +36,7 @@ public interface Service {
 	
 	//suggestions
 	public Boolean giveFeedback(int userId, String feedback);
-
+	public Boolean setAvailability(Available available);
 	public List<Suggestion> getAllSuggestions(Suggestion sugg);
 	public Integer regex (String id);
 	public String regexemail (String email);

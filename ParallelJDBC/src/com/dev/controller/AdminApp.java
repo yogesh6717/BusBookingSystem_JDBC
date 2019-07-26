@@ -1,13 +1,16 @@
 package com.dev.controller;
 
+import java.sql.Date;
 import java.util.List;
 import java.util.Scanner;
 
+import com.dev.beans.Available;
 import com.dev.beans.Bus;
 import com.dev.beans.Suggestion;
 import com.dev.beans.User;
 import com.dev.exception.BusCreateFailException;
 import com.dev.exception.BusDeleteFailException;
+import com.dev.exception.BusNotFoundException;
 import com.dev.exception.LoginException;
 import com.dev.exception.UpdateException;
 import com.dev.service.Service;
@@ -32,11 +35,13 @@ public class AdminApp {
 			while(bo) {
 				System.out.println("*****************************"+"\n"
 						+ "1.Search User"+"\n"
-						+ "2.Create Bus"+"\n"
+						+ "2.Add Bus"+"\n"
 						+ "3.Update Bus"+"\n"
 						+ "4.Delete Bus"+"\n"
-						+ "5.View Feedback"+"\n"
-						+ "6.Exit"+"\n"
+						+ "5.Set Bus Availability"+"\n"
+						+ "6.Search Bus"+"\n"
+						+ "7.View Feedback"+"\n"
+						+ "8.Exit"+"\n"
 						+ "*****************************");
 
 				int ad = Integer.parseInt(sc.next());
@@ -64,9 +69,17 @@ public class AdminApp {
 					e.printStackTrace();
 				}
 				break;
-				case 5: getSuggestion();
+				case 5:setAvailability();
 				break;
-				case 6 :bo = false;
+				case 6: try {
+						searchBus();
+					} catch (BusNotFoundException e) {
+						e.printStackTrace();
+					}
+				break;
+				case 7:getSuggestion();
+				break;
+				case 8 :bo = false;
 				System.out.println("*****************************");
 
 				break;
@@ -171,6 +184,60 @@ public class AdminApp {
 		else {
 			throw new BusDeleteFailException("Fail to Delete Bus Exception");
 		}
+	}
+	
+	private static void searchBus()throws BusNotFoundException{
+		
+		boolean busCheck = true;
+		Integer busId = 0;
+		while(busCheck)
+		{
+			System.out.println("Enter BusId");
+			Integer tempId=service.regex(sc.next());
+			if(tempId!=null) {
+				busId = tempId;
+				busCheck = false;
+			}else {
+				System.out.println("User id should be number !");
+
+			}
+		}
+
+		Bus bus = service.searchBus(busId);
+		if(bus != null)
+		{
+			System.out.println(bus);
+		}
+		else {
+			throw new BusNotFoundException("Bus Not Found Exception");
+		}
+
+		
+	}
+	
+	private static void setAvailability() {
+		Available available=new Available();
+		System.out.println("Enter the busId");
+		int busId=Integer.parseInt(sc.next());
+		Bus bus=service.searchBus(busId);
+		if(bus!=null){
+			System.out.println(bus);
+			available.setBusId(busId);
+			System.out.println("Enter the Available seats");
+			available.setAvailableSeats(Integer.parseInt(sc.next()));
+			System.out.println("Enter the date(yyyy-mm-dd)");
+			String tempDate = sc.next();
+			Date date = Date.valueOf(tempDate);
+			available.setAvailableDate(date);
+
+			if(service.setAvailability(available)){
+				System.out.println("Successfully Set the availability");
+			}
+		}else{
+			System.out.println("Failed to Set the availability");
+		}
+
+		
 	}
 
 	private static void getSuggestion() {
