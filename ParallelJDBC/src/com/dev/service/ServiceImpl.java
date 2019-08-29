@@ -15,11 +15,8 @@ import com.dev.dao.BusBookingJDBCImpl;
 
 public class ServiceImpl implements Service {
 
-	java.sql.Date sd1=new java.sql.Date(System.currentTimeMillis());
-	java.util.Date utilDate=new java.util.Date(sd1.getTime());
-
-
 	BusBookingDAO db = new BusBookingJDBCImpl();
+
 	@Override
 	public Boolean createUser(User user) {
 		return db.createUser(user);
@@ -29,11 +26,11 @@ public class ServiceImpl implements Service {
 	public Boolean updateUser(User user) {
 		return db.updateUser(user);
 	}
-	@Override
-	public Boolean deleteUser(int user_id , String password) {
-		return db.deleteUser(user_id , password);
-	}
 
+	@Override
+	public Boolean deleteUser(int user_id, String password) {
+		return db.deleteUser(user_id, password);
+	}
 
 	@Override
 	public User loginUser(int user_id, String password) {
@@ -79,23 +76,24 @@ public class ServiceImpl implements Service {
 	public Boolean cancelTicket(int booking_id) {
 		return db.cancelTicket(booking_id);
 	}
-	
+
 	@Override
 	public Boolean setAvailability(Available available) {
 		return db.setAvailability(available);
 	}
+
 	@Override
 	public Ticket getTicket(int booking_id) {
 		return db.getTicket(booking_id);
 	}
 
 	@Override
-	public List<Bus> checkAvailability(String source,String destination,  Date date) {
+	public List<Bus> checkAvailability(String source, String destination, Date date) {
 		return db.checkAvailability(source, destination, date);
 	}
 
 	@Override
-	public Integer checkAvailability( int bus_id, Date date){
+	public Integer checkAvailability(int bus_id, Date date) {
 		return db.checkAvailability(bus_id, date);
 	}
 
@@ -109,44 +107,45 @@ public class ServiceImpl implements Service {
 		return db.getAllSuggestions(sugg);
 	}
 
+	// contact validation
+
 	@Override
 	public Integer regex(String id) {
 		Pattern pat = Pattern.compile("\\d+");
 		Matcher mat = pat.matcher(id);
-		if(mat.matches()) {
+		if (mat.matches()) {
 			return Integer.parseInt(id);
-		}else {
+		} else {
 			return null;
 		}
 
 	}
+
+	// email validation
 
 	@Override
 	public String regexemail(String email) {
 		Pattern pat = Pattern.compile("\\w+\\@\\w+\\.\\w+");
 		Matcher mat = pat.matcher(email);
-		if(mat.matches()) {
+		if (mat.matches()) {
 			return email;
-		}else {
+		} else {
 			return null;
 		}
 
 	}
 
+	// contact validation
 	@Override
 	public Long regexcontact(String contact) {
 		Pattern pat = Pattern.compile("\\d{10}");
 		Matcher mat = pat.matcher(contact);
-		if(mat.matches()) {
+		if (mat.matches()) {
 			return Long.parseLong(contact);
-		}else {
+		} else {
 			return null;
 		}
 
 	}
 
-	
-
 }
-
-
